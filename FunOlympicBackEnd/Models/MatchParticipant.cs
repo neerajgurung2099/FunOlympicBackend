@@ -7,5 +7,6 @@ namespace FunOlympicBackEnd.Models
         public int MatchParticipantId { get;set; }
         public int MatchId { get; set; }
         public int ParticipantId { get; set; }
+        public decimal Points { get; set; }
     }
 }

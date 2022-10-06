@@ -6,6 +6,8 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Text.Json.Nodes;
 using Newtonsoft.Json;
+using static System.Net.Mime.MediaTypeNames;
+using System.Diagnostics.Metrics;
 
 namespace FunOlympicBackEnd.Controllers
 {
@@ -210,6 +212,221 @@ namespace FunOlympicBackEnd.Controllers
                 return new JsonResult(BadRequest());
             }
         }
+        
+        [HttpGet]
+        public JsonResult GetAllCountry()
+        {
+            try
+            {
+                SqlParameter[] parm = {
+
+                };
+                string result = helper.ReadDataToJson("usp_Country_SelectAll", parm, CommandType.StoredProcedure);
+                return new JsonResult(Ok(result));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult InsertPlayer(Player player)
+        {
+            try
+            {
+                SqlParameter[] parm = {
+                    new SqlParameter("@CountryId",player.CountryId),
+                    new SqlParameter("@GroupId",player.GroupId),
+                    new SqlParameter("@PlayerName",player.PlayerName),
+                    new SqlParameter("@PlayerDescription",player.PlayerDescription),
+                    
+                };
+                int AffectedRows = helper.InsertUpdateCn("usp_Player_Insert", parm, CommandType.StoredProcedure);
+                var JsonString = "";
+                if (AffectedRows == 1)
+                {
+                    JsonString = "{\"Status\":200}";
+
+                }
+                else
+                {
+                    JsonString = "{\"Status\":409}";
+                }
+                return new JsonResult(Ok(JsonString));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetAllPlayer()
+        {
+            try
+            {
+                SqlParameter[] parm = {
+
+                };
+                string result = helper.ReadDataToJson("usp_Player_SelectAll", parm, CommandType.StoredProcedure);
+                return new JsonResult(Ok(result));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetAllTeam()
+        {
+            try
+            {
+                SqlParameter[] parm = {
+
+                };
+                string result = helper.ReadDataToJson("usp_Team_SelectAll", parm, CommandType.StoredProcedure);
+                return new JsonResult(Ok(result));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+        [HttpPost]
+        public JsonResult InsertTeam(Team team)
+        {
+            try
+            {
+                SqlParameter[] parm = {
+                    new SqlParameter("@CountryId",team.CountryId),
+                    new SqlParameter("@GroupId",team.GroupId),
+                    new SqlParameter("@TeamName",team.TeamName),
+                    new SqlParameter("@TeamDescription",team.TeamDescription)
+
+                };
+                int AffectedRows = helper.InsertUpdateCn("usp_Team_Insert", parm, CommandType.StoredProcedure);
+                var JsonString = "";
+                if (AffectedRows == 1)
+                {
+                    JsonString = "{\"Status\":200}";
+
+                }
+                else
+                {
+                    JsonString = "{\"Status\":409}";
+                }
+                return new JsonResult(Ok(JsonString));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
+
+        [HttpPost]
+        public JsonResult InsertCountry(Country country)
+        {
+            try
+            {
+                SqlParameter[] parm = {
+                    new SqlParameter("@CountryName",country.CountryName)
+
+                };
+                int AffectedRows = helper.InsertUpdateCn("usp_Country_Insert", parm, CommandType.StoredProcedure);
+                var JsonString = "";
+                if (AffectedRows == 1)
+                {
+                    JsonString = "{\"Status\":200}";
+
+                }
+                else
+                {
+                    JsonString = "{\"Status\":409}";
+                }
+                return new JsonResult(Ok(JsonString));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
+
+        [HttpGet]
+        public JsonResult GetAllResult()
+        {
+            try
+            {
+                SqlParameter[] parm = {
+
+                };
+                string result = helper.ReadDataToJson("usp_MatchResult_SelectAll", parm, CommandType.StoredProcedure);
+                return new JsonResult(Ok(result));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult GetMatchParticipantByMatchId(Match match)
+        {
+            try
+            {
+                SqlParameter[] parm = {
+                    new SqlParameter("@MatchId",match.MatchId)
+                };
+                string result = helper.ReadDataToJson("usp_MatchParticipants_SelectByMatchId", parm, CommandType.StoredProcedure);
+                return new JsonResult(Ok(result));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
+
+        [HttpPost]
+        public JsonResult InsertMatchPoints(MatchParticipantList match)
+        {
+            try
+            {
+                
+                int AffectedRows;
+                int TotalAffectedRows = 0;
+                var JsonString = "";
+                foreach (var item in match.matchParticipants)
+                {
+                    SqlParameter[] parm = {
+                    new SqlParameter("@MatchParticipantId",item.MatchParticipantId),
+                    new SqlParameter("@Points",item.Points),
+                    };
+                    AffectedRows = helper.InsertUpdateCn("usp_MatchParticipants_InsertPoints", parm, CommandType.StoredProcedure);
+                    TotalAffectedRows += AffectedRows;
+                }
+                if (TotalAffectedRows > 0)
+                {
+                    JsonString = "{\"Status\":200}";
+
+                }
+                else
+                {
+                    JsonString = "{\"Status\":409}";
+
+                }
+                return new JsonResult(Ok(JsonString));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
+
 
     }
 }

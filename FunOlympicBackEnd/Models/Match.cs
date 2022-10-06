@@ -8,9 +8,11 @@
         public int CreatedDate { get; set; }
         public bool View { get; set; }
         public string LiveLink { get; set; }
-        public TimeOnly StartTime { get; set; }
-        public DateOnly StartDate { get; set; }
+        public string StartTime { get; set; }
+        public string StartDate { get; set; }
         public bool Active { get; set; }
+        public DateTime StartDateTime { get; set; }
         public List<MatchParticipant> matchParticipants { get; set; }
+        
     }
 }
