@@ -1,10 +1,11 @@
-﻿using static System.Net.Mime.MediaTypeNames;
+﻿using System.Net.Mime;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace FunOlympicBackEnd.Classes
 {
     public class ImageHelper
     {
-        private string folderPath = @"d:\funolympic-images";
+        private string folderPath = @"D:\NeerajGurung\Assignment\FunOlympic\fun-olympic-frontend\public\images";
 
          public async Task<string> UploadImage(IFormFile file)
         {
@@ -12,12 +13,14 @@ namespace FunOlympicBackEnd.Classes
                 {
                     System.IO.Directory.CreateDirectory(folderPath);
                 }
-                string filePath = Path.Combine(folderPath, Guid.NewGuid().ToString());
+
+            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName).ToLower();
+                string filePath = Path.Combine(folderPath, fileName );
                 using (Stream stream = new FileStream(filePath, FileMode.Create))
                 {
                     await file.CopyToAsync(stream);
                 }
-                return filePath;
+                return fileName;
         }
     }
 }

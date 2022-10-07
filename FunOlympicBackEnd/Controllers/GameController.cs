@@ -425,6 +425,92 @@ namespace FunOlympicBackEnd.Controllers
                 return new JsonResult(BadRequest());
             }
         }
+        [HttpPost]
+        public JsonResult InsertImageIntoGallery([FromForm]Gallery gallery)
+        {
+            try
+            {
+                ImageHelper image = new ImageHelper();
+                DataTable dt = new DataTable();
+                Task<string> imagePath = image.UploadImage(gallery.Image);
+
+                SqlParameter[] parm1 = {
+                    new SqlParameter("@ImageLink",imagePath.Result),
+                    };
+                dt = helper.ReadDataCn("usp_Image_Insert", parm1, CommandType.StoredProcedure);
+                int ImageId = int.Parse(dt.Rows[0]["ImageId"].ToString());
+
+                int AffectedRows;
+                var JsonString = "";
+                SqlParameter[] parm = {
+                new SqlParameter("@ImageId",ImageId),
+                new SqlParameter("@View",gallery.View),
+                };
+                AffectedRows = helper.InsertUpdateCn("usp_Gallery_Insert", parm, CommandType.StoredProcedure);
+                if (AffectedRows > 0)
+                {
+                    JsonString = "{\"Status\":200}";
+
+                }
+                else
+                {
+                    JsonString = "{\"Status\":409}";
+
+                }
+                return new JsonResult(Ok(JsonString));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetAllImage()
+        {
+            try
+            {
+                SqlParameter[] parm = {
+
+                };
+                string result = helper.ReadDataToJson("usp_Gallery_SelectAll", parm, CommandType.StoredProcedure);
+                return new JsonResult(Ok(result));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+        [HttpPost]
+        public JsonResult DeleteGalleryImageById(MatchParticipant match)
+        {
+            try
+            {
+                SqlParameter[] parm = {
+                    new SqlParameter("@GalleryId",match.MatchParticipantId),
+                };
+                int AffectedRows;
+                var JsonString = "";
+                AffectedRows = helper.InsertUpdateCn("usp_Gallery_DeleteById", parm, CommandType.StoredProcedure);
+                if (AffectedRows > 0)
+                {
+                    JsonString = "{\"Status\":200}";
+
+                }
+                else
+                {
+                    JsonString = "{\"Status\":409}";
+
+                }
+                return new JsonResult(Ok(JsonString));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
+
 
 
 
