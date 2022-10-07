@@ -510,6 +510,56 @@ namespace FunOlympicBackEnd.Controllers
             }
         }
 
+        [HttpGet]
+        public JsonResult GetAllNews()
+        {
+            try
+            {
+                SqlParameter[] parm = {
+
+                };
+                string result = helper.ReadDataToJson("usp_News_SelectAll", parm, CommandType.StoredProcedure);
+                return new JsonResult(Ok(result));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult InsertNews(News news)
+        {
+            try
+            {
+                SqlParameter[] parm = {
+                    new SqlParameter("@NewsTitle",news.NewsTitle),
+                    new SqlParameter("@NewsDescription",news.NewsDescription),
+                    new SqlParameter("@View",news.View),
+                    new SqlParameter("@GroupId",news.GroupId),
+                };
+                var JsonString = "";
+                int AffectedRows = helper.InsertUpdateCn("usp_News_Insert", parm, CommandType.StoredProcedure);
+                if (AffectedRows > 0)
+                {
+                    JsonString = "{\"Status\":200}";
+
+                }
+                else
+                {
+                    JsonString = "{\"Status\":409}";
+
+                }
+                return new JsonResult(Ok(JsonString));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+        
+
+
 
 
 
