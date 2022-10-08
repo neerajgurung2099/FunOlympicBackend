@@ -7,5 +7,6 @@
         public bool View { get; set; }
         public DateTime Created_Date { get; set; }
         public bool Active { get; set; }
+        public List<Game> games { get; set; }
     }
 }

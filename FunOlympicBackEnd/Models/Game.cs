@@ -13,5 +13,6 @@
         public DateTime CreatedDate { get; set; }
         public bool View { get; set; }
         public bool Active { get; set; }
+        public List<Match> matches { get; set; }
     }
 }
