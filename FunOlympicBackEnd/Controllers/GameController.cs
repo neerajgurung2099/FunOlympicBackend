@@ -557,7 +557,271 @@ namespace FunOlympicBackEnd.Controllers
                 return new JsonResult(BadRequest());
             }
         }
+        [HttpGet]
+        public JsonResult GetAllUsers()
+        {
+            try
+            {
+                SqlParameter[] parm = {
+
+                };
+                string result = helper.ReadDataToJson("usp_UserLogin_SelectAll", parm, CommandType.StoredProcedure);
+                return new JsonResult(Ok(result));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult UpdateUser(User user)
+        {
+            try
+            {
+                SqlParameter[] parm = {
+                    new SqlParameter("@UserId",user.UserId),
+                    new SqlParameter("@UserName",user.UserName),
+                    new SqlParameter("@UserPassword",user.UserPassword),
+                    new SqlParameter("@Email",user.Email),
+                };
+                var JsonString = "";
+                int AffectedRows = helper.InsertUpdateCn("usp_UserLogin_UpdateByUserId", parm, CommandType.StoredProcedure);
+                if (AffectedRows > 0)
+                {
+                    JsonString = "{\"Status\":200}";
+
+                }
+                else
+                {
+                    JsonString = "{\"Status\":409}";
+
+                }
+                return new JsonResult(Ok(JsonString));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+        [HttpPost]
+        public JsonResult GetUserByUserId(User user)
+        {
+            try
+            {
+                SqlParameter[] parm = {
+                    new SqlParameter("@Login_Id",user.UserId),
+                };
+                string result = helper.ReadDataToJson("usp_UserLogin_SelectById", parm, CommandType.StoredProcedure);
+                return new JsonResult(Ok(result));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult DeleteUser(User user)
+        {
+            try
+            {
+                SqlParameter[] parm = {
+                    new SqlParameter("@UserId",user.UserId),
+                };
+                var JsonString = "";
+                int AffectedRows= helper.InsertUpdateCn("usp_UserLogin_DeleteUser", parm, CommandType.StoredProcedure);
+                if (AffectedRows > 0)
+                {
+                    JsonString = "{\"Status\":200}";
+
+                }
+                else
+                {
+                    JsonString = "{\"Status\":409}";
+
+                }
+                return new JsonResult(Ok(JsonString));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult GetGroupDetailsById(GameGroup  group)
+        {
+            try
+            {
+                SqlParameter[] parm = {
+                    new SqlParameter("@GroupId",group.GroupId),
+                };
+                string result = helper.ReadDataToJson("usp_GameGroup_SelectById", parm, CommandType.StoredProcedure);
+                return new JsonResult(Ok(result));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
+
+        [HttpPost]
+        public JsonResult UpdateGameGroup(GameGroup game)
+        {
+            try
+            {
+                SqlParameter[] parm = {
+                    new SqlParameter("@GroupId",game.GroupId),
+                    new SqlParameter("@GroupName",game.GroupName),
+                    new SqlParameter("@GroupDescription",game.GroupDescription),
+                    new SqlParameter("@View",game.View),
+                };
+                var JsonString = "";
+                int AffectedRows = helper.InsertUpdateCn("usp_GameGroup_UpdateGroup", parm, CommandType.StoredProcedure);
+                if (AffectedRows > 0)
+                {
+                    JsonString = "{\"Status\":200}";
+
+                }
+                else
+                {
+                    JsonString = "{\"Status\":409}";
+
+                }
+                return new JsonResult(Ok(JsonString));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
+
+        [HttpPost]
+        public JsonResult DeleteGroup(GameGroup group)
+        {
+            try
+            {
+                SqlParameter[] parm = {
+                    new SqlParameter("@GroupId",group.GroupId),
+                };
+                var JsonString = "";
+                int AffectedRows = helper.InsertUpdateCn("usp_GameGroup_DeleteGroup", parm, CommandType.StoredProcedure);
+                if (AffectedRows > 0)
+                {
+                    JsonString = "{\"Status\":200}";
+
+                }
+                else
+                {
+                    JsonString = "{\"Status\":409}";
+
+                }
+                return new JsonResult(Ok(JsonString));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult UpdateGame(Game game)
+        {
+            try
+            {
+                SqlParameter[] parm = {
+                    new SqlParameter("@GameId",game.GameId),
+                    new SqlParameter("@GameName",game.GameName),
+                    new SqlParameter("@GameDescription",game.GameDescription),
+                    new SqlParameter("@View",game.View),
+                    new SqlParameter("@TotalMatches",game.TotalMatches),
+                };
+                var JsonString = "";
+                int AffectedRows = helper.InsertUpdateCn("usp_Game_Update", parm, CommandType.StoredProcedure);
+                if (AffectedRows > 0)
+                {
+                    JsonString = "{\"Status\":200}";
+
+                }
+                else
+                {
+                    JsonString = "{\"Status\":409}";
+
+                }
+                return new JsonResult(Ok(JsonString));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult GetGameDetailsById(Game game)
+        {
+            try
+            {
+                SqlParameter[] parm = {
+                    new SqlParameter("@GameId",game.GameId),
+                };
+                string result = helper.ReadDataToJson("usp_Game_SelectById", parm, CommandType.StoredProcedure);
+                return new JsonResult(Ok(result));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult DeleteGame(Game game)
+        {
+            try
+            {
+                SqlParameter[] parm = {
+                    new SqlParameter("@GameId",game.GameId),
+                };
+                var JsonString = "";
+                int AffectedRows = helper.InsertUpdateCn("usp_Game_DeleteById", parm, CommandType.StoredProcedure);
+                if (AffectedRows > 0)
+                {
+                    JsonString = "{\"Status\":200}";
+
+                }
+                else
+                {
+                    JsonString = "{\"Status\":409}";
+
+                }
+                return new JsonResult(Ok(JsonString));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
