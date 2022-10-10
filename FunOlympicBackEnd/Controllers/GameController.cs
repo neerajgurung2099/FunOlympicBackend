@@ -804,7 +804,169 @@ namespace FunOlympicBackEnd.Controllers
             }
         }
 
+
+        [HttpPost]
+        public JsonResult GetMatchDetailsById(Match match)
+        {
+            try
+            {
+                SqlParameter[] parm = {
+                    new SqlParameter("@MatchId",match.MatchId),
+                };
+                string result = helper.ReadDataToJson("usp_Match_SelectByMatchId", parm, CommandType.StoredProcedure);
+                return new JsonResult(Ok(result));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult UpdateMatch(Match match)
+        {
+            try
+            {
+                SqlParameter[] parm = {
+                    new SqlParameter("@MatchId",match.MatchId),
+                    new SqlParameter("@MatchTitle",match.MatchTitle),
+                    new SqlParameter("@LiveLink",match.LiveLink),
+                    new SqlParameter("@View",match.View),
+                    new SqlParameter("@StartDate",match.StartDate),
+                    new SqlParameter("@StartTime",match.StartTime),
+                };
+                var JsonString = "";
+                int AffectedRows = helper.InsertUpdateCn("usp_Match_UpdateByMatchId", parm, CommandType.StoredProcedure);
+                if (AffectedRows > 0)
+                {
+                    JsonString = "{\"Status\":200}";
+
+                }
+                else
+                {
+                    JsonString = "{\"Status\":409}";
+
+                }
+                return new JsonResult(Ok(JsonString));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
+
+        [HttpPost]
+        public JsonResult DeleteMatch(Match match)
+        {
+            try
+            {
+                SqlParameter[] parm = {
+                    new SqlParameter("@MatchId",match.MatchId),
+                };
+                var JsonString = "";
+                int AffectedRows = helper.InsertUpdateCn("usp_Match_DeleteByMatchId", parm, CommandType.StoredProcedure);
+                if (AffectedRows > 0)
+                {
+                    JsonString = "{\"Status\":200}";
+
+                }
+                else
+                {
+                    JsonString = "{\"Status\":409}";
+
+                }
+                return new JsonResult(Ok(JsonString));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult GetNewsDetailsById(News news)
+        {
+            try
+            {
+                SqlParameter[] parm = {
+                    new SqlParameter("@NewsId",news.NewsId),
+                };
+                string result = helper.ReadDataToJson("usp_News_SelectByNewsId", parm, CommandType.StoredProcedure);
+                return new JsonResult(Ok(result));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+        [HttpPost]
+        public JsonResult UpdateNews(News news)
+        {
+            try
+            {
+                SqlParameter[] parm = {
+                    new SqlParameter("@NewsId",news.NewsId),
+                    new SqlParameter("@NewsTitle",news.NewsTitle),
+                    new SqlParameter("@NewsDescription",news.NewsDescription),
+                    new SqlParameter("@View",news.View),
+                };
+                var JsonString = "";
+                int AffectedRows = helper.InsertUpdateCn("usp_News_UpdateByNewsId", parm, CommandType.StoredProcedure);
+                if (AffectedRows > 0)
+                {
+                    JsonString = "{\"Status\":200}";
+
+                }
+                else
+                {
+                    JsonString = "{\"Status\":409}";
+
+                }
+                return new JsonResult(Ok(JsonString));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult DeleteNews(News news)
+        {
+            try
+            {
+                SqlParameter[] parm = {
+                    new SqlParameter("@NewsId",news.NewsId),
+                };
+                var JsonString = "";
+                int AffectedRows = helper.InsertUpdateCn("usp_News_DeleteByNewsId", parm, CommandType.StoredProcedure);
+                if (AffectedRows > 0)
+                {
+                    JsonString = "{\"Status\":200}";
+
+                }
+                else
+                {
+                    JsonString = "{\"Status\":409}";
+
+                }
+                return new JsonResult(Ok(JsonString));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+        }
+
         
+
+
+
+
+
+
+
 
 
 
