@@ -8,6 +8,7 @@ using System.Data;
 using FunOlympicBackEnd.Classes;
 using System.Text.Json.Nodes;
 using System.Text.Json;
+using System.Net.Mail;
 
 namespace FunOlympicBackEnd.Controllers
 {
@@ -106,6 +107,79 @@ namespace FunOlympicBackEnd.Controllers
         }
 
 
-        
+        [HttpPost]
+        public JsonResult ResetPassword(User user)
+        {
+            try
+            {
+                string NewPassword = "L@xmir1n1";
+                SqlParameter[] parm = {
+                    new SqlParameter("@Email",user.Email),
+                };
+                int AffectedRows  = helper.InsertUpdateCn("usp_UserLogin_ResetPassword", parm, CommandType.StoredProcedure);
+                MailMessage mail = new MailMessage();
+                mail.To.Add(user.Email);
+                mail.From = new MailAddress("neeraj@insoftnepal.com");
+                mail.Subject = "New Password";
+                string Body = NewPassword;
+                mail.Body = Body;
+                mail.IsBodyHtml = true;
+                SmtpClient smtp = new SmtpClient();
+                smtp.Host = "smtp.gmail.com";
+                smtp.Port = 587;
+                smtp.UseDefaultCredentials = false; 
+                smtp.Credentials = new System.Net.NetworkCredential("neeraj@insoftnepal.com", "fhnooeuvqfwefukp"); // Enter senders User name and password  
+                smtp.EnableSsl = true;
+                smtp.Send(mail);
+                var  JsonString = "";
+                JsonString = "{\"Status\":200}";
+                return new JsonResult(Ok(JsonString));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+
+        }
+
+
+        [HttpPost]
+        public JsonResult AdminResetPassword(User user)
+        {
+            try
+            {
+                string NewPassword = "L@xmir1n1";
+                SqlParameter[] parm = {
+                };
+                int AffectedRows = helper.InsertUpdateCn("usp_AdminLogin_ResetPassword", parm, CommandType.StoredProcedure);
+                MailMessage mail = new MailMessage();
+                mail.To.Add("neerajgurung2099@gmail.com");
+                mail.From = new MailAddress("neeraj@insoftnepal.com");
+                mail.Subject = "New Password";
+                string Body = NewPassword;
+                mail.Body = Body;
+                mail.IsBodyHtml = true;
+                SmtpClient smtp = new SmtpClient();
+                smtp.Host = "smtp.gmail.com";
+                smtp.Port = 587;
+                smtp.UseDefaultCredentials = false;
+                smtp.Credentials = new System.Net.NetworkCredential("neeraj@insoftnepal.com", "fhnooeuvqfwefukp"); // Enter senders User name and password  
+                smtp.EnableSsl = true;
+                smtp.Send(mail);
+                var JsonString = "";
+                JsonString = "{\"Status\":200}";
+                return new JsonResult(Ok(JsonString));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest());
+            }
+
+        }
+
+
+
+
+
     }
 }
